@@ -1,12 +1,12 @@
 Solución al pwn200 de 3DSCTF 2016:
 
 - Con el strings ves que hay un flag.txt  y una variable fl4g
-''''
+```
 	strings not_the_same | grep flag
 	flag.txt
 	strings not_the_same | grep fl4g
 	fl4g
-''''
+```
 - Creamos el fichero flag.txt con el texto que queramos dentro
 - Peta con un offset de 45
 - Paso a paso en el gdb
