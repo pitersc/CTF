@@ -144,7 +144,6 @@ python pwn_not_the_same.py > file.txt
 ./not_the_same < file.txt
 
 - Notas varias
-
       Num     Type           Disp Enb Address    What
 2       breakpoint     keep y   0x08048a00 <main+32>
 	breakpoint already hit 1 time
@@ -156,9 +155,3 @@ x/32xw $esp-16
 0xbffff350:	0x0804f0a0	0x080eca2d	0x080eca2d	0xbffff374
 0xbffff360:	0x00000000	0x00000001	0xbffff404	0x080489e0
 0xbffff370:	0x00000000	0x0804818c	0x080eb00c	0x49656e69
-
-
-
-
-   
-
